@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
       [{ 
         model: Category,
         through: Product, 
-        as:'category_products',
+        as:'category_id',
       },
       { 
         model: Tag,
@@ -35,12 +35,12 @@ router.get('/:id', async (req, res) => {
       include: [{ 
         model: Category, 
         through: Product, 
-        as: 'category_name'
+        as: 'category_id'
       },
       { 
         model: Tag,
         through: Product,
-        as: 'tag_name'
+        as: 'tag_id'
       }] 
     });
     if (!product) {
@@ -133,8 +133,17 @@ router.delete('/:id', async (req, res) => {
   // be sure to include its associated Category and Tag data
   try {
     const product = await Product.findById(req.params.id, {
-      include: [{ model: Category,Tag, through: Product, as: 'category_tag' }] 
-    });
+      include: [{ 
+        model: Category,
+        through: Product, 
+        as: 'category_id' 
+      },
+      { 
+        model: Tag,
+        through: Product,
+        as: 'tag_id'
+      }
+    ]});
     if (!product) {
       res.status(404).json({ message: 'No product found with this id!' });
       return;
