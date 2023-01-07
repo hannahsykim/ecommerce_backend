@@ -58,7 +58,7 @@ router.put('/:id', async (req, res) => {
       return;
     } 
 
-    res.status(200).json(category);
+    res.status(200).json({category});
   } catch (err) {
     res.status(500).json(err);
     return;
@@ -79,7 +79,7 @@ router.delete('/:id', async (req, res) => {
       return;
     } 
 
-    res.status(200).json(category);
+    res.status(200).json({ message: 'Category deleted!' });
   } catch (err) {
     res.status(500).json(err);
     return;

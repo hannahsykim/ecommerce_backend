@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
         model: Tag
       }]
   });
-    res.json(product);  
+    res.status(200).json(product);  
   } catch (err) {
     res.status(500).json(err);
   } 
@@ -132,7 +132,7 @@ router.delete('/:id', async (req, res) => {
       return;
     }
     
-    res.status(200).json({ message: 'Product tag deleted!' })
+    res.status(200).json({ message: 'Product deleted!' })
     } catch (err) {
     res.status(500).json(err);
   }
