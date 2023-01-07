@@ -10,14 +10,10 @@ router.get('/', async (req, res) => {
   try {
     const product = await Product.findAll({ include: 
       [{ 
-        model: Category,
-        through: Product, 
-        as:'category_id',
+        model: Category
       },
       { 
-        model: Tag,
-        through: Product,
-        as:'tag_id'
+        model: Tag
       }]
   });
     res.json(product);  
@@ -31,24 +27,20 @@ router.get('/:id', async (req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
   try {
-    const product = await Product.findByPk(req.params.id, {
-      include: [{ 
-        model: Category, 
-        through: Product, 
-        as: 'category_id'
+    const singleProduct = await Product.findByPk(req.params.id, { include: 
+      [{ 
+        model: Category
       },
       { 
-        model: Tag,
-        through: Product,
-        as: 'tag_id'
+        model: Tag
       }] 
     });
-    if (!product) {
+    if (!singleProduct) {
       res.status(404).json({ message: 'No product found with this id!' });
       return;
     }
 
-    res.status(200).json(product);
+    res.status(200).json(singleProduct);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -132,28 +124,17 @@ router.delete('/:id', async (req, res) => {
   // delete one product by its `id` value
   // be sure to include its associated Category and Tag data
   try {
-    const product = await Product.findById(req.params.id, {
-      include: [{ 
-        model: Category,
-        through: Product, 
-        as: 'category_id' 
-      },
-      { 
-        model: Tag,
-        through: Product,
-        as: 'tag_id'
-      }
-    ]});
+    const product = await Product.destroy({ 
+      where: { id: req.params.id }
+    });
     if (!product) {
       res.status(404).json({ message: 'No product found with this id!' });
       return;
     }
-    await ProductTag.destroy({ where: { product_id: req.params.id }}).then(() =>
-      res.status(200).json({ message: 'Product tag deleted!' })
-    );
-  } catch (err) {
+    
+    res.status(200).json({ message: 'Product tag deleted!' })
+    } catch (err) {
     res.status(500).json(err);
-    return;
   }
 });
 
